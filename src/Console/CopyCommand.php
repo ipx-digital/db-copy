@@ -1,6 +1,6 @@
 <?php
 
-namespace ipxDigital\DbCopy\Console;
+namespace IPX\DbCopy\Console;
 
 use Illuminate\Console\Command;
 
