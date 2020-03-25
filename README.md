@@ -2,7 +2,7 @@
 Quickly and easily refresh your local MySQL database with production data by automating the process of copying your production database to your local development database.
 
 ## Installation
-1. Use `composer require ipx-digital/db-copy` in your project's directory to include it.
+1. Use `composer require --dev ipx-digital/db-copy` in your project's directory to include it.
 2. In config/app.php, under 'providers' add:
 	`IPX\DbCopy\DbCopyServiceProvider::class`
 3. Add the following to .env:
