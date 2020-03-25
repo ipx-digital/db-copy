@@ -45,6 +45,7 @@ class CopyCommand extends Command
         $dump = $this->dumpProductionDB();
         $this->wipeDevelopmentDB();
         $this->importDumpToDevelopmentDB($dump);
+        $this->info("Done.");
     }   
 
     public function confirmWipe()
@@ -64,9 +65,20 @@ class CopyCommand extends Command
         $password = env('PRODUCTION_DB_PASSWORD');
         $database = env('PRODUCTION_DB_DATABASE');
         $host = env('PRODUCTION_DB_HOST');
-        $options = "--host {$host} -u {$username} -p{$password} {$database}";
+        $ssh_username = env('SSH_USERNAME');
         $dumpDir = "packages/db-copy/dump.sql";
-        shell_exec("mysqldump {$options} > {$dumpDir}");
+        $options = "-u {$username} -p{$password} {$database}";
+        if($ssh_username)
+        {
+            $this->info("Creating SQL dump from {$ssh_username}@{$host} over SSH...");
+            exec("ssh {$ssh_username}@{$host} 'mysqldump {$options}' > {$dumpDir} 2> /dev/null");
+        }
+        else
+        {
+            $this->info("Creating SQL dump from {$host}...");
+            exec("mysqldump -h {$host} {$options} > {$dumpDir} 2> /dev/null");
+        }
+        $this->info("SQL dump created.");
         return $dumpDir;
     }
 
@@ -77,16 +89,15 @@ class CopyCommand extends Command
         $database = env('DB_DATABASE');
         $host = env('DB_HOST');
 
-        exec("mysql -u {$username} -p{$password} -h {$host} -e'show tables;' {$database}", $tables);
-        exec("mysql -u {$username} -p{$password} -h {$host} -e'SET FOREIGN_KEY_CHECKS = 0;' {$database}");
-
+        exec("mysql -u {$username} -p{$password} -h {$host} -e'show tables;' {$database} 2> /dev/null", $tables);
         array_shift($tables);
+
+        $this->info("Wiping development database...");
 
         foreach($tables as $table)
         {
-            exec("mysql -u {$username} -p{$password} -h {$host} -e'DROP TABLE IF EXISTS {$table};' {$database}");
+            exec("mysql -u {$username} -p{$password} -h {$host} -e'SET FOREIGN_KEY_CHECKS = 0;DROP TABLE IF EXISTS {$table};SET FOREIGN_KEY_CHECKS = 1;' {$database} 2> /dev/null");
         }
-        exec("mysql -u {$username} -p{$password} -h {$host} -e'SET FOREIGN_KEY_CHECKS = 1;' {$database}");
     }
 
     public function importDumpToDevelopmentDB($dump)
@@ -95,6 +106,8 @@ class CopyCommand extends Command
         $password = env('DB_PASSWORD');
         $database = env('DB_DATABASE');
         $host = env('DB_HOST');
-        shell_exec("mysql -u {$username} -p{$password} {$database} < {$dump}");
+        $this->info("Importing dump into development database...");
+        exec("mysql -u {$username} -p{$password} {$database} < {$dump} 2> /dev/null");
+        exec("rm " . $dump);
     }
 }

@@ -1,5 +1,5 @@
 {
-    "name": "ipx/db-copy",
+    "name": "ipx-digital/db-copy",
     "description": "Copies your production database to your development environment.",
     "require": {
         "php": "^7.2",
