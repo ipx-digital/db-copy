@@ -3,5 +3,10 @@
     "description": "Copies your production database to your development environment.",
     "require": {
         "php": "^7.2"
-    }
+    },
+    "autoload": {
+	    "psr-4": {
+	      "IPX\\DbCopy": "src/",
+	    }
+	 }
 }
