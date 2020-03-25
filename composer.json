@@ -6,7 +6,7 @@
     },
     "autoload": {
 	    "psr-4": {
-	      "IPX\\DbCopy": "src/",
+	      "ipxDigital\\DbCopy": "src/",
 	    }
 	 }
 }

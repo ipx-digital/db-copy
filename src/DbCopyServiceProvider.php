@@ -1,6 +1,6 @@
 <?php
 
-namespace IPX\DbCopy;
+namespace ipxDigital\DbCopy;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
