@@ -66,7 +66,7 @@ class CopyCommand extends Command
         $database = env('PRODUCTION_DB_DATABASE');
         $host = env('PRODUCTION_DB_HOST');
         $ssh_username = env('SSH_USERNAME');
-        $dumpDir = "packages/db-copy/dump.sql";
+        $dumpDir = "dump.sql";
         $options = "-u {$username} -p{$password} {$database}";
         if($ssh_username)
         {
