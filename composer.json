@@ -3,7 +3,7 @@
     "description": "Copies your production database to your development environment.",
     "require": {
         "php": "^7.2",
-        "vlucas/phpdotenv": "^4.0"
+        "vlucas/phpdotenv": "^3.6"
     },
     "autoload": {
         "psr-0": {
