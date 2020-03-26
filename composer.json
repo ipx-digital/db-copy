@@ -2,11 +2,19 @@
     "name": "ipx-digital/db-copy",
     "description": "Copies your production database to your development environment.",
     "require": {
-        "php": "^7.2"
+        "php": "^7.2",
+        "vlucas/phpdotenv": "^4.0"
     },
     "autoload": {
-	    "psr-0": {
-	      "IPX\\DbCopy\\": "src/"
-	    }
-	 }
+        "psr-0": {
+          "IPX\\DbCopy\\": "src/"
+        }
+     },
+     "extra": {
+        "laravel": {
+            "providers": [
+                "IPX\\DbCopy\\DbCopyServiceProvider"
+            ]
+        }
+    }
 }
